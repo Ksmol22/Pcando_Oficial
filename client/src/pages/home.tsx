@@ -82,7 +82,7 @@ export default function Home() {
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold mb-2">
-          ¡Bienvenido, {user?.firstName || 'Builder'}!
+          ¡Bienvenido, PC-l❤️ver {user?.firstName || 'Builder'}!
         </h1>
         <p className="text-lg text-muted-foreground">
           Gestiona tus configuraciones y descubre nuevas builds para tu próximo proyecto

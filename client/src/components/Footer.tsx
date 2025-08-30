@@ -1,6 +1,5 @@
 import { Link } from "wouter";
-import { Cpu } from "lucide-react";
-import { SiX, SiFacebook, SiInstagram, SiYoutube } from "react-icons/si";
+import { Cpu, Twitter, Facebook, Instagram, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -21,28 +20,28 @@ export default function Footer() {
                 className="text-muted-foreground hover:text-primary transition-colors"
                 data-testid="link-twitter"
               >
-                <SiX className="h-5 w-5" />
+                <Twitter className="h-5 w-5" />
               </a>
               <a
                 href="#"
                 className="text-muted-foreground hover:text-primary transition-colors"
                 data-testid="link-facebook"
               >
-                <SiFacebook className="h-5 w-5" />
+                <Facebook className="h-5 w-5" />
               </a>
               <a
                 href="#"
                 className="text-muted-foreground hover:text-primary transition-colors"
                 data-testid="link-instagram"
               >
-                <SiInstagram className="h-5 w-5" />
+                <Instagram className="h-5 w-5" />
               </a>
               <a
                 href="#"
                 className="text-muted-foreground hover:text-primary transition-colors"
                 data-testid="link-youtube"
               >
-                <SiYoutube className="h-5 w-5" />
+                <Youtube className="h-5 w-5" />
               </a>
             </div>
           </div>
@@ -144,7 +143,7 @@ export default function Footer() {
 
         <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © 2024 PC Builder Pro. Todos los derechos reservados.
+            © 2025 PC Builder Pro.ss Todos los derechos reservados.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a
