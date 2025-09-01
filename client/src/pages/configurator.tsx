@@ -159,28 +159,89 @@ export default function Configurator() {
   }, 0);
 
   const checkCompatibility = () => {
-    // Basic compatibility check
+    const issues: string[] = [];
+    let totalPowerConsumption = 0;
+    
     const cpu = selectedComponents.cpu;
     const motherboard = selectedComponents.motherboard;
     const ram = selectedComponents.ram;
-    
+    const gpu = selectedComponents.gpu;
+    const psu = selectedComponents.psu;
+    const cooler = selectedComponents.cooler;
+    const case_ = selectedComponents.case;
+
+    // CPU + Motherboard compatibility
     if (cpu && motherboard) {
       const cpuSocket = cpu.specifications?.socket;
       const mbSocket = motherboard.specifications?.socket;
       if (cpuSocket && mbSocket && cpuSocket !== mbSocket) {
-        return { compatible: false, issues: ['Socket del CPU no compatible con la placa base'] };
+        issues.push(`❌ Socket incompatible: CPU ${cpuSocket} vs Motherboard ${mbSocket}`);
+      } else if (cpuSocket && mbSocket && cpuSocket === mbSocket) {
+        // Compatible
       }
     }
 
+    // RAM + Motherboard compatibility
     if (ram && motherboard) {
       const ramType = ram.specifications?.type;
       const mbRamType = motherboard.specifications?.ramType;
       if (ramType && mbRamType && ramType !== mbRamType) {
-        return { compatible: false, issues: ['Tipo de RAM no compatible con la placa base'] };
+        issues.push(`❌ RAM incompatible: ${ramType} vs ${mbRamType} en motherboard`);
       }
     }
 
-    return { compatible: true, issues: [] };
+    // Power consumption calculation
+    if (cpu) totalPowerConsumption += parseInt(cpu.specifications?.tdp || '65');
+    if (gpu) totalPowerConsumption += parseInt(gpu.specifications?.powerConsumption || '220');
+    totalPowerConsumption += 100; // Base consumption (motherboard, RAM, storage, etc.)
+
+    // PSU capacity check
+    if (psu) {
+      const psuWattage = parseInt(psu.specifications?.wattage || '0');
+      if (psuWattage > 0 && totalPowerConsumption > psuWattage * 0.8) {
+        issues.push(`⚠️ PSU insuficiente: Necesitas al menos ${Math.ceil(totalPowerConsumption / 0.8)}W, tienes ${psuWattage}W`);
+      }
+    }
+
+    // GPU + Case compatibility (GPU length)
+    if (gpu && case_) {
+      const gpuLength = parseInt(gpu.specifications?.length || '0');
+      const caseMaxGpu = parseInt(case_.specifications?.maxGpuLength || '0');
+      if (gpuLength > 0 && caseMaxGpu > 0 && gpuLength > caseMaxGpu) {
+        issues.push(`❌ GPU muy larga: ${gpuLength}mm vs máximo ${caseMaxGpu}mm del case`);
+      }
+    }
+
+    // CPU Cooler + Case compatibility (cooler height)
+    if (cooler && case_) {
+      const coolerHeight = parseInt(cooler.specifications?.height || '0');
+      const caseMaxCooler = parseInt(case_.specifications?.maxCpuCoolerHeight || '0');
+      if (coolerHeight > 0 && caseMaxCooler > 0 && coolerHeight > caseMaxCooler) {
+        issues.push(`❌ Cooler muy alto: ${coolerHeight}mm vs máximo ${caseMaxCooler}mm del case`);
+      }
+    }
+
+    // CPU + Cooler compatibility
+    if (cpu && cooler) {
+      const cpuSocket = cpu.specifications?.socket;
+      const coolerCompatibility = cooler.specifications?.compatibility || '';
+      if (cpuSocket && coolerCompatibility && !coolerCompatibility.includes(cpuSocket)) {
+        issues.push(`❌ Cooler incompatible con socket ${cpuSocket}`);
+      }
+    }
+
+    // Warning if required components are missing
+    const requiredTypes = ['cpu', 'motherboard', 'ram', 'storage', 'psu'];
+    const missingRequired = requiredTypes.filter(type => !selectedComponents[type]);
+    if (missingRequired.length > 0) {
+      issues.push(`⚠️ Componentes requeridos faltantes: ${missingRequired.join(', ')}`);
+    }
+
+    return { 
+      compatible: issues.length === 0 || issues.every(i => i.startsWith('⚠️')), 
+      issues,
+      totalPowerConsumption
+    };
   };
 
   const compatibility = checkCompatibility();
@@ -359,6 +420,51 @@ export default function Configurator() {
               });
             }}
           />
+
+          {/* Compatibility Check */}
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                {compatibility.compatible ? (
+                  <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
+                ) : (
+                  <AlertTriangle className="mr-2 h-5 w-5 text-red-500" />
+                )}
+                Compatibilidad
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {compatibility.issues.length === 0 ? (
+                <div className="text-green-600 flex items-center">
+                  <CheckCircle className="mr-2 h-4 w-4" />
+                  Todos compatibles
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {compatibility.issues.map((issue, index) => (
+                    <div key={index} className={`text-xs flex items-start ${
+                      issue.startsWith('❌') ? 'text-red-600' : 'text-orange-600'
+                    }`}>
+                      <span className="mr-1">{issue.slice(0, 2)}</span>
+                      <span>{issue.slice(2)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              {compatibility.totalPowerConsumption > 0 && (
+                <div className="mt-3 p-2 bg-muted rounded-lg">
+                  <div className="text-xs font-medium mb-1">Consumo Estimado</div>
+                  <div className="text-sm font-bold text-primary">
+                    {compatibility.totalPowerConsumption}W
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    PSU recomendado: {Math.ceil(compatibility.totalPowerConsumption / 0.8)}W
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         {/* Main Content */}

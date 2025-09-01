@@ -1,7 +1,12 @@
 import 'dotenv/config';
+import dotenv from 'dotenv';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from "pg";
 import * as schema from "@shared/schema";
+
+// Load environment variables
+dotenv.config({ path: '.env.local' });
+dotenv.config();
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -9,10 +14,10 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-// For development, we'll use node-postgres instead of Neon
+// PostgreSQL configuration
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-export { pool };
 export const db = drizzle(pool, { schema });
+export { pool };

@@ -55,23 +55,13 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Component categories
-export const componentTypeEnum = pgEnum('component_type', [
-  'cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case', 'cooler', 'peripheral'
-]);
-
-// User roles
-export const userRoleEnum = pgEnum('user_role', [
-  'client', 'support', 'admin'
-]);
-
 // Components table
 export const components = pgTable("components", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: varchar("name").notNull(),
   type: componentTypeEnum("type").notNull(),
   brand: varchar("brand").notNull(),
-  model: varchar("model").notNull(),
+  model: varchar("model"), // Hacer opcional
   imageUrl: varchar("image_url"),
   specifications: jsonb("specifications").notNull(),
   basePrice: decimal("base_price", { precision: 10, scale: 2 }).notNull(),
