@@ -25,6 +25,19 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// CORS middleware para permitir comunicación con scraping system
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 // Simple logging
 app.use((req, res, next) => {
   const timestamp = new Date().toLocaleTimeString();
@@ -84,6 +97,39 @@ app.get('/api/builds', async (req, res) => {
     console.error('Error fetching builds:', error);
     res.status(500).json({ message: "Error fetching builds" });
   }
+});
+
+// Endpoints para sistema de scraping
+app.post('/api/scraping/products', async (req, res) => {
+  try {
+    const { products } = req.body;
+    
+    if (!products || !Array.isArray(products)) {
+      return res.status(400).json({ message: 'Invalid products data' });
+    }
+
+    // Aquí podrías guardar los productos en la base de datos
+    // Por ahora solo los devolvemos como confirmación
+    console.log(`📦 Received ${products.length} products from scraping system`);
+    
+    res.json({ 
+      success: true, 
+      message: `Processed ${products.length} products`,
+      count: products.length 
+    });
+  } catch (error) {
+    console.error('Error processing scraped products:', error);
+    res.status(500).json({ message: 'Error processing products' });
+  }
+});
+
+app.get('/api/scraping/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    service: 'backend',
+    timestamp: new Date().toISOString(),
+    port: process.env.PORT || 3000
+  });
 });
 
 // Health check

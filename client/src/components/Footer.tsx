@@ -92,24 +92,24 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Soporte</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-primary transition-colors" data-testid="link-help">
+                <Link href="/help-center" className="hover:text-primary transition-colors" data-testid="link-help">
                   Centro de Ayuda
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors" data-testid="link-chat">
+                <Link href="/live-chat" className="hover:text-primary transition-colors" data-testid="link-chat">
                   Chat en Vivo
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors" data-testid="link-warranty">
+                <Link href="/warranties" className="hover:text-primary transition-colors" data-testid="link-warranty">
                   Garantías
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors" data-testid="link-contact">
+                <Link href="/contact" className="hover:text-primary transition-colors" data-testid="link-contact">
                   Contacto
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -118,24 +118,24 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Empresa</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-primary transition-colors" data-testid="link-about">
+                <Link href="/about-us" className="hover:text-primary transition-colors" data-testid="link-about">
                   Sobre Nosotros
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors" data-testid="link-careers">
+                <Link href="/careers" className="hover:text-primary transition-colors" data-testid="link-careers">
                   Carreras
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors" data-testid="link-press">
+                <Link href="/press" className="hover:text-primary transition-colors" data-testid="link-press">
                   Prensa
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors" data-testid="link-partners">
+                <Link href="/partners" className="hover:text-primary transition-colors" data-testid="link-partners">
                   Partners
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

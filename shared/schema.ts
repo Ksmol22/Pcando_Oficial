@@ -9,8 +9,23 @@ import {
   integer,
   decimal,
   boolean,
+  primaryKey,
+  unique,
   pgEnum,
-} from "drizzle-orm/pg-core";
+} from 'drizzle-orm/pg-core';
+
+// User roles - Definir antes de usarlo
+export const userRoleEnum = pgEnum('user_role', [
+  'client',   // Usuario cliente regular
+  'support',  // Agente de soporte
+  'admin'     // Administrador
+]);
+
+// Component categories
+export const componentTypeEnum = pgEnum('component_type', [
+  'cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case', 'cooler', 'peripheral'
+]);
+
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -23,7 +38,9 @@ export const sessions = pgTable(
     sess: jsonb("sess").notNull(),
     expire: timestamp("expire").notNull(),
   },
-  (table) => [index("IDX_session_expire").on(table.expire)],
+  (table) => ({
+    expireIndex: index("IDX_session_expire").on(table.expire)
+  }),
 );
 
 // User storage table.
@@ -33,6 +50,7 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
+  role: userRoleEnum("role").default('client'),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -40,6 +58,11 @@ export const users = pgTable("users", {
 // Component categories
 export const componentTypeEnum = pgEnum('component_type', [
   'cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case', 'cooler', 'peripheral'
+]);
+
+// User roles
+export const userRoleEnum = pgEnum('user_role', [
+  'client', 'support', 'admin'
 ]);
 
 // Components table

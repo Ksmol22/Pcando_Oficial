@@ -1,0 +1,52 @@
+{
+  "name": "pcando-scraping-system",
+  "version": "1.0.0",
+  "description": "Sistema de scraping para comparación de precios de componentes de PC",
+  "main": "start.js",
+  "scripts": {
+    "start": "node start.js",
+    "dev": "nodemon start.js",
+    "test": "node start.js test",
+    "config": "node start.js config",
+    "help": "node start.js help",
+    "install-deps": "npm install puppeteer cheerio axios express cors helmet express-rate-limit node-cron bull redis",
+    "setup": "npm run install-deps && echo 'Sistema configurado correctamente'"
+  },
+  "keywords": [
+    "web-scraping",
+    "price-comparison",
+    "pc-components",
+    "ecommerce",
+    "api"
+  ],
+  "author": "Kevin Molina <kevin@pcando.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "bull": "^4.16.5",
+    "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^7.2.0",
+    "node-cron": "^3.0.3",
+    "puppeteer": "^21.11.0",
+    "redis": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "nodemon": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ksmol22/Pcando_Oficial.git",
+    "directory": "scraping-system"
+  },
+  "bugs": {
+    "url": "https://github.com/Ksmol22/Pcando_Oficial/issues"
+  },
+  "homepage": "https://github.com/Ksmol22/Pcando_Oficial#readme"
+}

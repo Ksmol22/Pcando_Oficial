@@ -1,0 +1,95 @@
+{
+  "scrapers": {
+    "amazon": {
+      "enabled": true,
+      "baseUrl": "https://www.amazon.com",
+      "delay": 2000,
+      "maxConcurrent": 1,
+      "usePuppeteer": true,
+      "categories": {
+        "processors": "Processors",
+        "graphics_cards": "Graphics Cards",
+        "motherboards": "Motherboards",
+        "memory": "Computer Memory",
+        "storage": "Internal Hard Drives"
+      }
+    },
+    "mercadolibre": {
+      "enabled": true,
+      "countries": {
+        "MX": {
+          "baseUrl": "https://www.mercadolibre.com.mx",
+          "currency": "MXN",
+          "categories": {
+            "processors": "MLM1693",
+            "graphics_cards": "MLM1694",
+            "motherboards": "MLM1692",
+            "memory": "MLM1695",
+            "storage": "MLM1696"
+          }
+        },
+        "AR": {
+          "baseUrl": "https://www.mercadolibre.com.ar",
+          "currency": "ARS",
+          "categories": {
+            "processors": "MLA1693",
+            "graphics_cards": "MLA1694",
+            "motherboards": "MLA1692",
+            "memory": "MLA1695",
+            "storage": "MLA1696"
+          }
+        },
+        "CO": {
+          "baseUrl": "https://www.mercadolibre.com.co",
+          "currency": "COP",
+          "categories": {
+            "processors": "MCO1693",
+            "graphics_cards": "MCO1694",
+            "motherboards": "MCO1692",
+            "memory": "MCO1695",
+            "storage": "MCO1696"
+          }
+        }
+      },
+      "delay": 1500,
+      "maxConcurrent": 2,
+      "usePuppeteer": false
+    }
+  },
+  "api": {
+    "port": 3001,
+    "cors": {
+      "origins": ["http://localhost:5173", "http://localhost:3000"]
+    },
+    "rateLimit": {
+      "windowMs": 900000,
+      "max": 100
+    }
+  },
+  "cache": {
+    "ttl": 3600,
+    "maxSize": 1000,
+    "cleanupInterval": 1800
+  },
+  "scheduler": {
+    "enabled": false,
+    "jobs": {
+      "updatePrices": {
+        "cron": "0 */6 * * *",
+        "description": "Actualizar precios cada 6 horas"
+      },
+      "cleanupCache": {
+        "cron": "0 2 * * *",
+        "description": "Limpiar cache a las 2 AM"
+      }
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "logLevel": "info",
+    "metrics": {
+      "collectInterval": 60000,
+      "retentionDays": 7
+    }
+  }
+}

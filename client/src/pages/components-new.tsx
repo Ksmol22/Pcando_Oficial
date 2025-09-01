@@ -7,13 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ShoppingCart, Search, Star, Filter } from "lucide-react";
 import { products, productCategories } from "@shared/productDatabase";
 import { useAuth } from "@/hooks/useAuth";
-import { useCart } from "@/hooks/useCart";
-import { useToast } from "@/hooks/use-toast";
 
 export default function Components() {
   const { isAuthenticated } = useAuth();
-  const { addItem } = useCart();
-  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
@@ -44,40 +40,6 @@ export default function Components() {
     if (stock === 0) return { color: 'destructive', text: 'Agotado' };
     if (stock < 10) return { color: 'secondary', text: `${stock} disponibles` };
     return { color: 'default', text: 'En stock' };
-  };
-
-  const handleAddToCart = (product: any) => {
-    if (!isAuthenticated) {
-      toast({
-        title: "Inicia sesión",
-        description: "Debes iniciar sesión para agregar productos al carrito",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (product.stock === 0) {
-      toast({
-        title: "Producto agotado",
-        description: "Este producto no está disponible en stock",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.imageUrl,
-      category: product.category,
-      specifications: product.specifications,
-    });
-
-    toast({
-      title: "Producto agregado",
-      description: `${product.name} ha sido agregado al carrito`,
-    });
   };
 
   return (
@@ -208,7 +170,6 @@ export default function Components() {
                     <Button 
                       className="w-full" 
                       disabled={product.stock === 0}
-                      onClick={() => handleAddToCart(product)}
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
                       {product.stock === 0 ? 'Agotado' : 'Agregar al Carrito'}

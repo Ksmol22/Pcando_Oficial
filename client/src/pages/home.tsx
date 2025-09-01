@@ -23,7 +23,7 @@ import {
 import { isUnauthorizedError } from "@/lib/authUtils";
 
 export default function Home() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, canAccessAdminPanel, canAccessSupportPanel, getUserDisplayName, getRoleName } = useAuth();
   const { toast } = useToast();
 
   const { data: userBuilds = [], isLoading: buildsLoading, error: buildsError } = useQuery({
@@ -81,16 +81,56 @@ export default function Home() {
     <div className="container mx-auto px-4 py-8">
       {/* Welcome Section */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2">
-          ¡Bienvenido, PC-l❤️ver {user?.firstName || 'Builder'}!
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Gestiona tus configuraciones y descubre nuevas builds para tu próximo proyecto
-        </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              ¡Bienvenido, {getUserDisplayName()}!
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              {canAccessAdminPanel() ? 'Administra la plataforma y gestiona configuraciones' :
+               canAccessSupportPanel() ? 'Brinda soporte y gestiona tickets de usuarios' :
+               'Gestiona tus configuraciones y descubre nuevas builds para tu próximo proyecto'}
+            </p>
+          </div>
+          <Badge variant={canAccessAdminPanel() ? 'destructive' : canAccessSupportPanel() ? 'secondary' : 'default'} 
+                 className={`px-3 py-1 ${canAccessSupportPanel() && !canAccessAdminPanel() ? 'bg-green-100 text-green-800' : ''}`}>
+            {getRoleName()}
+          </Badge>
+        </div>
       </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {/* Admin Panel Access */}
+        {canAccessAdminPanel() && (
+          <Link href="/admin">
+            <Card className="hover:border-red-500 transition-colors cursor-pointer group border-red-200">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-red-500/20 transition-colors">
+                  <Monitor className="h-6 w-6 text-red-500" />
+                </div>
+                <h3 className="font-semibold mb-1">Panel Admin</h3>
+                <p className="text-sm text-muted-foreground">Administrar sistema</p>
+              </CardContent>
+            </Card>
+          </Link>
+        )}
+
+        {/* Support Panel Access */}
+        {canAccessSupportPanel() && (
+          <Link href="/support-panel">
+            <Card className="hover:border-green-500 transition-colors cursor-pointer group border-green-200">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-green-500/20 transition-colors">
+                  <HardDrive className="h-6 w-6 text-green-500" />
+                </div>
+                <h3 className="font-semibold mb-1">Panel Soporte</h3>
+                <p className="text-sm text-muted-foreground">Gestionar tickets</p>
+              </CardContent>
+            </Card>
+          </Link>
+        )}
+
         <Link href="/configurator">
           <Card className="hover:border-primary transition-colors cursor-pointer group">
             <CardContent className="p-6 text-center">
