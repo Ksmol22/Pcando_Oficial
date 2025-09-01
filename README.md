@@ -1,53 +1,65 @@
 # PCando Oficial 🖥️
 
-Una aplicación web para configurar y armar computadoras, que permite a los usuarios seleccionar componentes, crear builds personalizadas y comparar precios.
+Una aplicación web moderna para configurar y armar computadoras, con un sistema completo de compatibilidad y estimación de rendimiento.
 
-## 📋 Características
+[![Deploy to GitHub Pages](https://github.com/Ksmol22/Pcando_Oficial/actions/workflows/deploy.yml/badge.svg)](https://github.com/Ksmol22/Pcando_Oficial/actions/workflows/deploy.yml)
 
-- **Configurador de PC**: Interfaz intuitiva para seleccionar componentes
-- **Gestión de Componentes**: Base de datos de CPUs, GPUs, RAM, motherboards, etc.
-- **Builds Personalizadas**: Guarda y gestiona múltiples configuraciones
-- **Comparación de Precios**: Compara precios de diferentes proveedores
-- **Estimación de Rendimiento**: Calculadora de rendimiento esperado
-- **Autenticación**: Sistema de usuarios con Replit Auth
+## 🌐 Demo en Vivo
 
-## 🛠️ Tecnologías
+**🚀 [Ver Demo en GitHub Pages](https://ksmol22.github.io/Pcando_Oficial/)**
 
-### Frontend
-- **React 18** - Framework de interfaz de usuario
-- **TypeScript** - Tipado estático
-- **Tailwind CSS** - Estilos y diseño
-- **Radix UI** - Componentes de interfaz accesibles
-- **Tanstack Query** - Gestión de estado del servidor
-- **Wouter** - Enrutamiento ligero
-- **Vite** - Herramienta de desarrollo
+## ✨ Características Principales
 
-### Backend
-- **Express.js** - Servidor web
-- **TypeScript** - Tipado estático
-- **Drizzle ORM** - ORM para base de datos
-- **PostgreSQL** - Base de datos (via Neon)
-- **Zod** - Validación de esquemas
+### 🔧 Configurador de PC
+- **Selección de Componentes**: CPU, GPU, RAM, Motherboard, Storage, PSU, Case, Cooler
+- **Sistema de Compatibilidad Avanzado**: Validación automática de compatibilidad entre componentes
+- **Estimación de Rendimiento**: Cálculos de performance para Gaming, Workstation y Streaming
+- **Comparación de Precios**: Múltiples tiendas y proveedores
 
-## 🚀 Instalación y Configuración
+### 🎨 Interfaz de Usuario
+- **Diseño Responsive**: Funciona perfectamente en desktop y mobile
+- **Tema Oscuro/Claro**: Interfaz moderna con soporte para temas
+- **Componentes Interactivos**: Cards de productos, filtros, búsqueda en tiempo real
+- **Feedback Visual**: Indicadores de compatibilidad y progress bars
 
-### Prerrequisitos
+### 🧠 Sistema Inteligente
+- **Algoritmo de Compatibilidad**: Verifica sockets, tipos de RAM, consumo energético
+- **Base de Datos Completa**: Más de 20 componentes reales con especificaciones detalladas
+- **Cálculos de Performance**: Basado en benchmarks reales de hardware
 
-- Node.js (versión 18 o superior)
-- npm o yarn
-- Base de datos PostgreSQL (recomendado: Neon Database)
+### 🔐 Sistema de Roles
+- **Cliente**: Acceso completo al configurador
+- **Soporte**: Herramientas adicionales de asistencia
+- **Admin**: Gestión completa del sistema
 
-### 1. Clonar el repositorio
+## 🚀 Deployment a GitHub Pages
 
+### Deployment Automático
+El proyecto se deploya automáticamente a GitHub Pages cuando se hace push a la rama `main`.
+
+### Deployment Manual
+
+1. **Clonar el repositorio**:
 ```bash
 git clone https://github.com/Ksmol22/Pcando_Oficial.git
 cd Pcando_Oficial
 ```
 
-### 2. Configuración automática (Recomendado)
-
+2. **Instalar dependencias**:
 ```bash
-# Ejecutar script de configuración automática
+npm install
+```
+
+3. **Ejecutar script de deployment**:
+```bash
+./deploy.sh
+```
+
+O manualmente:
+```bash
+npm run build:gh-pages
+npm run deploy
+```
 ./setup.sh
 ```
 

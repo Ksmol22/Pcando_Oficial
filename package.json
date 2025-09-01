@@ -12,7 +12,7 @@
     "express",
     "postgresql"
   ],
-  "homepage": "https://github.com/Ksmol22/Pcando_Oficial#readme",
+  "homepage": "https://ksmol22.github.io/Pcando_Oficial",
   "repository": {
     "type": "git",
     "url": "https://github.com/Ksmol22/Pcando_Oficial.git"
@@ -33,6 +33,9 @@
     "dev:frontend": "vite",
     "dev:backend": "tsx watch server/api-only.ts",
     "build": "tsc && vite build",
+    "build:gh-pages": "tsc && vite build --base=/Pcando_Oficial/",
+    "preview": "vite preview",
+    "deploy": "npm run build:gh-pages && gh-pages -d dist/public",
     "start": "npm run verify && concurrently \"npm run start:frontend\" \"npm run start:backend\" \"npm run start:scraping\"",
     "start:frontend": "vite --port 5173 --host",
     "start:backend": "NODE_ENV=production tsx server/index-db.ts",
@@ -102,6 +105,7 @@
     "autoprefixer": "^10.4.18",
     "concurrently": "^9.2.1",
     "drizzle-kit": "^0.24.0",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.2",
