@@ -1,53 +1,97 @@
-# PCando Oficial 🖥️
-
-Una aplicación web moderna para configurar y armar computadoras, con un sistema completo de compatibilidad y estimación de rendimiento.
+# 🖥️ PCando Oficial - Configurador de PC
 
 [![Deploy to GitHub Pages](https://github.com/Ksmol22/Pcando_Oficial/actions/workflows/deploy.yml/badge.svg)](https://github.com/Ksmol22/Pcando_Oficial/actions/workflows/deploy.yml)
 
-## 🌐 Demo en Vivo
+**Una aplicación web completa para configurar y armar computadoras con validación en tiempo real**
 
-**🚀 [Ver Demo en GitHub Pages](https://ksmol22.github.io/Pcando_Oficial/)**
+🚀 **[Ver Aplicación en Vivo](https://ksmol22.github.io/Pcando_Oficial/)**
 
 ## ✨ Características Principales
 
-### 🔧 Configurador de PC
-- **Selección de Componentes**: CPU, GPU, RAM, Motherboard, Storage, PSU, Case, Cooler
-- **Sistema de Compatibilidad Avanzado**: Validación automática de compatibilidad entre componentes
-- **Estimación de Rendimiento**: Cálculos de performance para Gaming, Workstation y Streaming
-- **Comparación de Precios**: Múltiples tiendas y proveedores
+- �️ **Configurador Interactivo**: Selecciona componentes de PC en tiempo real
+- 💰 **Cálculo de Precios**: Precio total actualizado instantáneamente  
+- ✅ **Validación de Compatibilidad**: Verificación automática de componentes
+- 💾 **Guardado Automático**: Tus configuraciones se guardan en el navegador
+- 📱 **Diseño Responsive**: Funciona perfecto en móvil y desktop
+- ⚡ **Sin Dependencias de Servidor**: Funciona completamente en el cliente
 
-### 🎨 Interfaz de Usuario
-- **Diseño Responsive**: Funciona perfectamente en desktop y mobile
-- **Tema Oscuro/Claro**: Interfaz moderna con soporte para temas
-- **Componentes Interactivos**: Cards de productos, filtros, búsqueda en tiempo real
-- **Feedback Visual**: Indicadores de compatibilidad y progress bars
+## 🎮 Componentes Disponibles
 
-### 🧠 Sistema Inteligente
-- **Algoritmo de Compatibilidad**: Verifica sockets, tipos de RAM, consumo energético
-- **Base de Datos Completa**: Más de 20 componentes reales con especificaciones detalladas
-- **Cálculos de Performance**: Basado en benchmarks reales de hardware
+### Procesadores (CPU)
+- Intel Core i7-13700K - $450
+- AMD Ryzen 7 7700X - $400
 
-### 🔐 Sistema de Roles
-- **Cliente**: Acceso completo al configurador
-- **Soporte**: Herramientas adicionales de asistencia
-- **Admin**: Gestión completa del sistema
+### Tarjetas Gráficas (GPU)  
+- NVIDIA RTX 4070 Super - $600
+- AMD RX 7700 XT - $450
 
-## 🚀 Deployment a GitHub Pages
+### Memoria RAM
+- G.Skill Trident Z5 32GB DDR5 - $180
 
-### Deployment Automático
-El proyecto se deploya automáticamente a GitHub Pages cuando se hace push a la rama `main`.
+### Almacenamiento
+- Samsung 980 PRO 1TB NVMe - $120
 
-### Deployment Manual
+## 🛠️ Tecnologías Utilizadas
 
-1. **Clonar el repositorio**:
+- **Frontend**: React 18 + TypeScript
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **Deployment**: GitHub Pages + GitHub Actions
+- **Storage**: localStorage (sin necesidad de base de datos)
+
+## 🚀 Despliegue
+
+La aplicación está configurada para desplegarse automáticamente en GitHub Pages:
+
+1. **URL Principal**: https://ksmol22.github.io/Pcando_Oficial/
+2. **Despliegue Automático**: Cada push a `main` activa el workflow
+3. **Sin Configuración**: Solo abre la URL y funciona
+
+## 📦 Instalación Local
+
 ```bash
+# Clonar el repositorio
 git clone https://github.com/Ksmol22/Pcando_Oficial.git
 cd Pcando_Oficial
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
+npm run dev:frontend
+
+# Construir para producción
+npm run build
 ```
 
-2. **Instalar dependencias**:
-```bash
-npm install
+## 🎯 Cómo Usar
+
+1. **Selecciona Categoría**: Haz clic en las pestañas (CPU, GPU, RAM, Storage)
+2. **Elige Componente**: Haz clic en el componente que deseas
+3. **Ve el Resumen**: El panel lateral muestra tu build completo
+4. **Precio Total**: Se calcula automáticamente
+5. **Progreso**: Barra de progreso muestra completitud (4/4 componentes)
+6. **Guardado**: Tu configuración se guarda automáticamente
+
+## ✅ Estado del Proyecto
+
+- ✅ **Aplicación Completamente Funcional**
+- ✅ **Interfaz Usuario Moderna**
+- ✅ **Almacenamiento Local Implementado**
+- ✅ **GitHub Pages Configurado**
+- ✅ **Workflow CI/CD Activo**
+- ✅ **Responsive Design**
+
+## 📁 Estructura del Proyecto
+
+```
+Pcando_Oficial/
+├── index.html              # Aplicación principal
+├── client/src/             # Código fuente React/TypeScript  
+├── dist/                   # Build de producción
+├── .github/workflows/      # GitHub Actions
+└── README.md              # Este archivo
+```
 ```
 
 3. **Ejecutar script de deployment**:
