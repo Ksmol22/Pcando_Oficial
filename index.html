@@ -1,142 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PCando Oficial - Configurador de PC</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+    <meta name="description" content="Una aplicación web para configurar y armar computadoras">
+    
+    <!-- GitHub Pages SPA Support -->
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
         }
-        
-        .container {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 600px;
-            margin: 2rem;
-        }
-        
-        .logo {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .status {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 2rem 0;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            margin: 0.5rem;
-        }
-        
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        
-        .feature {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2rem;
-            }
-            .container {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="logo">🖥️ PCando Oficial</div>
-        <div class="subtitle">Configurador de PC - Tu herramienta definitiva para armar computadoras</div>
-        
-        <div class="status">
-            <h3>📋 Pasos para Activar GitHub Pages</h3>
-            <div style="text-align: left; margin: 1rem 0;">
-                <p><strong>1.</strong> Ve a tu repositorio en GitHub</p>
-                <p><strong>2.</strong> Ve a Settings → Pages</p>
-                <p><strong>3.</strong> En "Source" selecciona "GitHub Actions"</p>
-                <p><strong>4.</strong> Guarda los cambios</p>
-            </div>
-        </div>
-        
-        <div class="feature-grid">
-            <div class="feature">
-                <div class="feature-icon">⚙️</div>
-                <h4>Configurador Interactivo</h4>
-                <p>Selecciona componentes y verifica compatibilidad en tiempo real</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🔍</div>
-                <h4>Validación Avanzada</h4>
-                <p>Sistema inteligente de compatibilidad entre componentes</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">💾</div>
-                <h4>Builds Guardadas</h4>
-                <p>Guarda y comparte tus configuraciones favoritas</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📊</div>
-                <h4>Análisis de Performance</h4>
-                <p>Estimaciones de rendimiento para gaming y trabajo</p>
-            </div>
-        </div>
-        
-        <div style="margin-top: 2rem;">
-            <a href="/" class="btn">🔄 Recargar Página</a>
-            <a href="https://github.com/Ksmol22/Pcando_Oficial" class="btn">📖 Ver en GitHub</a>
-        </div>
-    </div>
-</body>
+      }(window.location))
+    </script>
+    <script type="module" crossorigin src="/Pcando_Oficial/assets/index-5z8Neovz.js"></script>
+    <link rel="stylesheet" crossorigin href="/Pcando_Oficial/assets/index-CXPicIZ5.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
