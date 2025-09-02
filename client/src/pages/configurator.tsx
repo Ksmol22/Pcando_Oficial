@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useComponents, useBuilds } from "@/hooks/useData";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,8 +28,6 @@ import {
   Sparkles,
   Settings
 } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
-import { isUnauthorizedError } from "@/lib/authUtils";
 
 interface ComponentType {
   id: string;
@@ -41,7 +39,7 @@ interface ComponentType {
 const componentTypes: ComponentType[] = [
   { id: 'cpu', name: 'Procesador', icon: Cpu, required: true },
   { id: 'gpu', name: 'Tarjeta Gráfica', icon: Monitor, required: true },
-  { id: 'ram', name: 'Memoria RAM', icon: MemoryStick, required: true },
+  { id: 'memory', name: 'Memoria RAM', icon: MemoryStick, required: true },
   { id: 'motherboard', name: 'Placa Base', icon: Settings, required: true },
   { id: 'storage', name: 'Almacenamiento', icon: HardDrive, required: true },
   { id: 'psu', name: 'Fuente', icon: Zap, required: true },
@@ -50,9 +48,8 @@ const componentTypes: ComponentType[] = [
 ];
 
 export default function Configurator() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
   
   const [selectedType, setSelectedType] = useState('cpu');
   const [selectedComponents, setSelectedComponents] = useState<{[key: string]: any}>({});
@@ -61,94 +58,9 @@ export default function Configurator() {
   const [buildUseCase, setBuildUseCase] = useState('');
   const [currentBuildId, setCurrentBuildId] = useState<string | null>(null);
 
-  const { data: components = [], isLoading: componentsLoading, error: componentsError } = useQuery({
-    queryKey: ["/api/components", selectedType],
-    enabled: isAuthenticated,
-    retry: false,
-  });
-
-  const createBuildMutation = useMutation({
-    mutationFn: async (buildData: any) => {
-      const response = await apiRequest("POST", "/api/builds", buildData);
-      return response.json();
-    },
-    onSuccess: (newBuild) => {
-      setCurrentBuildId(newBuild.id);
-      toast({
-        title: "Build Creada",
-        description: `${newBuild.name} se ha guardado exitosamente`,
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/builds"] });
-    },
-    onError: (error) => {
-      if (isUnauthorizedError(error as Error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
-      toast({
-        title: "Error",
-        description: "No se pudo guardar la build",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const addComponentToBuildMutation = useMutation({
-    mutationFn: async ({ buildId, componentId, priceAtTime }: any) => {
-      const response = await apiRequest("POST", `/api/builds/${buildId}/components`, {
-        componentId,
-        priceAtTime,
-        quantity: 1,
-      });
-      return response.json();
-    },
-    onError: (error) => {
-      if (isUnauthorizedError(error as Error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
-      toast({
-        title: "Error",
-        description: "No se pudo añadir el componente",
-        variant: "destructive",
-      });
-    },
-  });
-
-  useEffect(() => {
-    if (componentsError && isUnauthorizedError(componentsError as Error)) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-    }
-  }, [componentsError, toast]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+  // Use our local data hooks
+  const { components, isLoading: componentsLoading, addComponent } = useComponents(selectedType);
+  const { builds, addBuild, updateBuild } = useBuilds(user?.id);
 
   const selectedComponentsCount = Object.keys(selectedComponents).length;
   const requiredComponents = componentTypes.filter(t => t.required).length;
@@ -246,20 +158,11 @@ export default function Configurator() {
 
   const compatibility = checkCompatibility();
 
-  const handleComponentSelect = (component: any) => {
+  const handleComponentSelect = async (component: any) => {
     setSelectedComponents(prev => ({
       ...prev,
       [selectedType]: component
     }));
-
-    // If we have a build ID, add the component to the build
-    if (currentBuildId) {
-      addComponentToBuildMutation.mutate({
-        buildId: currentBuildId,
-        componentId: component.id,
-        priceAtTime: component.basePrice,
-      });
-    }
 
     toast({
       title: "Componente Seleccionado",
@@ -267,7 +170,7 @@ export default function Configurator() {
     });
   };
 
-  const handleSaveBuild = () => {
+  const handleSaveBuild = async () => {
     if (!buildName.trim()) {
       toast({
         title: "Error",
@@ -277,22 +180,44 @@ export default function Configurator() {
       return;
     }
 
-    if (selectedComponentsCount === 0) {
+    if (Object.keys(selectedComponents).length === 0) {
       toast({
-        title: "Error",
+        title: "Error", 
         description: "Selecciona al menos un componente",
         variant: "destructive",
       });
       return;
     }
 
-    createBuildMutation.mutate({
-      name: buildName,
-      description: buildDescription,
-      useCase: buildUseCase,
-      totalPrice: totalPrice.toString(),
-      isPublic: false,
-    });
+    try {
+      const selectedComponentIds = Object.values(selectedComponents).map((comp: any) => comp.id);
+      const totalPrice = Object.values(selectedComponents).reduce((total: number, comp: any) => total + (comp.price || 0), 0);
+      
+      const buildData = {
+        name: buildName,
+        description: buildDescription,
+        useCase: buildUseCase,
+        components: selectedComponentIds,
+        totalPrice,
+        performanceScore: compatibility.compatible ? 85 : 65,
+        category: buildUseCase || 'custom',
+        userId: user?.id || 'anonymous'
+      };
+
+      const newBuild = await addBuild(buildData);
+      setCurrentBuildId(newBuild.id);
+      
+      toast({
+        title: "Build Guardada",
+        description: `${buildName} se ha guardado exitosamente`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la build",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleQuickBuild = (useCase: string) => {
