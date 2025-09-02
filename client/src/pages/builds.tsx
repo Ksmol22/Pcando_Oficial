@@ -43,56 +43,93 @@ export default function Builds() {
 
   // Filter builds for public tab (you could add a public flag to builds)
   const publicBuilds = allBuilds.filter(build => build.userId !== user?.id);
-    enabled: isAuthenticated && activeTab === 'explore',
-    retry: false,
-  });
 
-  const deleteBuildMutation = useMutation({
-    mutationFn: async (buildId: string) => {
-      await apiRequest("DELETE", `/api/builds/${buildId}`);
-    },
-    onSuccess: () => {
+  const handleDeleteBuild = async (buildId: string) => {
+    try {
+      await deleteBuild(buildId);
       toast({
         title: "Build Eliminada",
         description: "La build se ha eliminado exitosamente",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/builds"] });
-    },
-    onError: (error) => {
-      if (isUnauthorizedError(error as Error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
+    } catch (error) {
       toast({
         title: "Error",
         description: "No se pudo eliminar la build",
         variant: "destructive",
       });
-    },
-  });
+    }
+  };
 
-  useEffect(() => {
-    const error = activeTab === 'my-builds' ? userBuildsError : publicBuildsError;
-    if (error && isUnauthorizedError(error as Error)) {
+  const handleShareBuild = async (build: any) => {
+    const shareData = {
+      title: `${build.name} - PCando`,
+      text: `Mira esta configuración de PC: ${build.description}`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        toast({
+          title: "Build Compartida",
+          description: "La build se ha compartido exitosamente",
+        });
+      } catch (error) {
+        // User cancelled sharing
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
       toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
+        title: "Link Copiado",
+        description: "El enlace de la build se ha copiado al portapapeles",
+      });
+    }
+  };
+
+  if (userBuildsLoading || publicBuildsLoading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="text-center py-12">
+        <Cpu className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+        <h3 className="text-lg font-medium mb-2">Builds de PC</h3>
+        <p className="text-muted-foreground mb-6">
+          Gestiona tus configuraciones guardadas
+        </p>
+        <Link href="/configurator">
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            Crear Nueva Build
+          </Button>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+  const handleDeleteBuild = async (buildId: string) => {
+    try {
+      await deleteBuild(buildId);
+      toast({
+        title: "Build Eliminada",
+        description: "La build se ha eliminado exitosamente",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la build",
         variant: "destructive",
       });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
     }
-  }, [userBuildsError, publicBuildsError, activeTab, toast]);
+  };
 
-  if (isLoading) {
+  if (userBuildsLoading || publicBuildsLoading) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
