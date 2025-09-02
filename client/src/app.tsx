@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Router, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster";
@@ -30,7 +30,7 @@ import Partners from "./pages/partners";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-function Router() {
+function RouterComponent() {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
@@ -41,10 +41,13 @@ function Router() {
     );
   }
 
+  // Determine base path for GitHub Pages
+  const basePath = window.location.pathname.includes('/Pcando_Oficial') ? '/Pcando_Oficial' : '';
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
-      <Switch>
+      <Router base={basePath}>
         {/* Authentication Routes - Available to all users */}
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
@@ -86,7 +89,7 @@ function Router() {
           </>
         )}
         <Route component={NotFound} />
-      </Switch>
+      </Router>
       <Footer />
     </div>
   );
@@ -98,7 +101,7 @@ function App() {
       <TooltipProvider>
         <CartProvider>
           <Toaster />
-          <Router />
+          <RouterComponent />
         </CartProvider>
       </TooltipProvider>
     </QueryClientProvider>
