@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { User } from "@shared/schema";
 
-export type UserRole = 'client' | 'support' | 'admin';
+export type UserRole = 'customer' | 'support' | 'admin';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -9,24 +9,31 @@ export function useAuth() {
   const [isClientSide, setIsClientSide] = useState(false);
 
   useEffect(() => {
-    setIsClientSide(true);
-    
-    // Verificar si hay token y datos del usuario en localStorage
-    const token = localStorage.getItem('auth_token');
-    const userData = localStorage.getItem('user_data');
-    
-    if (token && userData) {
+    const initAuth = () => {
+      setIsClientSide(true);
+      
+      // Verificar si hay token y datos del usuario en localStorage
       try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
+        const token = localStorage.getItem('auth_token');
+        const userData = localStorage.getItem('user_data');
+        
+        if (token && userData) {
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
+        }
       } catch (error) {
         // Si hay error al parsear, limpiar localStorage
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user_data');
+        console.error('Error parsing user data:', error);
+      } finally {
+        setIsLoading(false);
       }
-    }
-    
-    setIsLoading(false);
+    };
+
+    // Pequeño delay para evitar problemas de hydration
+    const timer = setTimeout(initAuth, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -36,36 +43,39 @@ export function useAuth() {
       // Diferentes usuarios con diferentes roles para demo
       if (email === "admin@pcando.com" && password === "admin123") {
         mockUser = {
-          id: "1",
+          id: 1,
           email: "admin@pcando.com",
           firstName: "Administrador",
           lastName: "Principal",
           role: "admin",
           profileImageUrl: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         };
       } else if (email === "support@pcando.com" && password === "support123") {
         mockUser = {
-          id: "2",
+          id: 2,
           email: "support@pcando.com",
           firstName: "Soporte",
           lastName: "Técnico",
           role: "support",
           profileImageUrl: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         };
       } else if (email === "demo@pcando.com" && password === "demo123") {
         mockUser = {
-          id: "3",
+          id: 3,
           email: "demo@pcando.com",
           firstName: "Cliente",
           lastName: "Demo",
-          role: "client",
+          role: "customer",
           profileImageUrl: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         };
       } else {
         return { success: false, message: 'Credenciales inválidas' };
@@ -86,14 +96,15 @@ export function useAuth() {
     try {
       // Simulación de registro para demo - por defecto cliente
       const mockUser: User = {
-        id: Date.now().toString(),
+        id: Date.now(),
         email,
         firstName: name.split(' ')[0] || name,
         lastName: name.split(' ').slice(1).join(' ') || '',
-        role: 'client',
+        role: 'customer',
         profileImageUrl: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       // Guardar en localStorage
@@ -137,7 +148,7 @@ export function useAuth() {
   };
 
   const isClientRole = (): boolean => {
-    return hasRole('client');
+    return hasRole('customer');
   };
 
   const canAccessAdminPanel = (): boolean => {
@@ -163,7 +174,7 @@ export function useAuth() {
         return 'Administrador';
       case 'support':
         return 'Soporte';
-      case 'client':
+      case 'customer':
         return 'Cliente';
       default:
         return 'Usuario';

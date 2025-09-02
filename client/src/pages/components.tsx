@@ -87,6 +87,24 @@ export default function Components() {
     });
   };
 
+  // Check authentication
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <ShoppingCart className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+          <h2 className="text-2xl font-bold mb-4">Acceso no autorizado</h2>
+          <p className="text-muted-foreground mb-6">
+            Debes iniciar sesión para ver el catálogo de componentes
+          </p>
+          <Button asChild>
+            <a href="/login">Iniciar Sesión</a>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">

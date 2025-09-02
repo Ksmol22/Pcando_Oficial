@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { useComponents, useBuilds } from "@/hooks/useData";
@@ -230,6 +231,24 @@ export default function Configurator() {
       description: `Generando build optimizada para ${useCase}`,
     });
   };
+
+  // Check authentication
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Cpu className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+          <h2 className="text-2xl font-bold mb-4">Acceso no autorizado</h2>
+          <p className="text-muted-foreground mb-6">
+            Debes iniciar sesión para usar el configurador
+          </p>
+          <Button asChild>
+            <Link href="/login">Iniciar Sesión</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
