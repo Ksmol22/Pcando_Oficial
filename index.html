@@ -1,30 +1,89 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PCando Oficial - Configurador de PC</title>
     <meta name="description" content="Una aplicación web para configurar y armar computadoras">
     
-    <!-- GitHub Pages SPA Support -->
-    <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location))
+    <!-- Redirección temporal -->
+    <script>
+        // Redirigir a la demo mientras se configura GitHub Pages
+        window.location.replace('./demo.html');
     </script>
-    <script type="module" crossorigin src="/Pcando_Oficial/assets/index-5z8Neovz.js"></script>
-    <link rel="stylesheet" crossorigin href="/Pcando_Oficial/assets/index-CXPicIZ5.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 { font-size: 3em; margin-bottom: 20px; }
+        p { font-size: 1.2em; margin: 15px 0; opacity: 0.9; }
+        .button {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 10px;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+        .button:hover { background: #45a049; }
+        .secondary { background: #2196F3; }
+        .secondary:hover { background: #1976D2; }
+        .loading {
+            animation: spin 2s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖥️ PCando Oficial</h1>
+        <p><span class="loading">⚙️</span>Configurando GitHub Pages...</p>
+        <p>Serás redirigido automáticamente a la demo funcional.</p>
+        <p>Si no eres redirigido automáticamente:</p>
+        <a href="./demo.html" class="button">🚀 Ir a la Demo</a>
+        <a href="https://github.com/Ksmol22/Pcando_Oficial" class="button secondary">📖 Ver en GitHub</a>
+        <hr style="margin: 30px 0; opacity: 0.3;">
+        <h3>📋 Estado del Proyecto</h3>
+        <p>✅ Aplicación completamente funcional</p>
+        <p>✅ Demo independiente disponible</p>
+        <p>⚠️ GitHub Pages: Pendiente de configuración manual</p>
+        <p style="font-size: 0.9em; margin-top: 20px;">
+            Para activar GitHub Pages completo, ve a Settings → Pages → Source: GitHub Actions
+        </p>
+    </div>
+
+    <script>
+        // Redirección automática después de 3 segundos
+        setTimeout(() => {
+            window.location.href = './demo.html';
+        }, 3000);
+    </script>
+</body>
 </html>
