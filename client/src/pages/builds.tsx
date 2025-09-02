@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useBuilds } from "@/hooks/useData";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,27 +27,22 @@ import {
   Heart,
   Star
 } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
-import { isUnauthorizedError } from "@/lib/authUtils";
 
 export default function Builds() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [useCaseFilter, setUseCaseFilter] = useState('all');
   const [sortBy, setSortBy] = useState('updated');
   const [activeTab, setActiveTab] = useState('my-builds');
 
-  const { data: userBuilds = [], isLoading: userBuildsLoading, error: userBuildsError } = useQuery({
-    queryKey: ["/api/builds"],
-    enabled: isAuthenticated && activeTab === 'my-builds',
-    retry: false,
-  });
+  // Use our local data hooks
+  const { builds: userBuilds, isLoading: userBuildsLoading, deleteBuild, updateBuild } = useBuilds(user?.id);
+  const { builds: allBuilds, isLoading: publicBuildsLoading } = useBuilds(); // Get all builds for public tab
 
-  const { data: publicBuilds = [], isLoading: publicBuildsLoading, error: publicBuildsError } = useQuery({
-    queryKey: ["/api/builds", "public"],
+  // Filter builds for public tab (you could add a public flag to builds)
+  const publicBuilds = allBuilds.filter(build => build.userId !== user?.id);
     enabled: isAuthenticated && activeTab === 'explore',
     retry: false,
   });

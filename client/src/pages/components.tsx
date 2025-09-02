@@ -5,25 +5,39 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ShoppingCart, Search, Star, Filter } from "lucide-react";
-import { products, productCategories } from "@shared/productDatabase";
+import { useComponents } from "@/hooks/useData";
 import { useAuth } from "@/hooks/useAuth";
-import { useCart } from "@/hooks/useCart";
+import { useCart } from "@/hooks/useData";
 import { useToast } from "@/hooks/use-toast";
+
+const productCategories = [
+  { id: 'all', name: 'Todos los Componentes' },
+  { id: 'cpu', name: 'Procesadores' },
+  { id: 'gpu', name: 'Tarjetas Gráficas' },
+  { id: 'memory', name: 'Memoria RAM' },
+  { id: 'motherboard', name: 'Placas Base' },
+  { id: 'storage', name: 'Almacenamiento' },
+  { id: 'psu', name: 'Fuentes' },
+  { id: 'case', name: 'Gabinetes' },
+  { id: 'cooler', name: 'Refrigeración' }
+];
 
 export default function Components() {
   const { isAuthenticated } = useAuth();
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
 
-  const filteredProducts = products
+  // Get components using our hook - if 'all' is selected, get all categories
+  const { components, isLoading } = useComponents(categoryFilter === 'all' ? undefined : categoryFilter);
+
+  const filteredProducts = components
     .filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.brand.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = categoryFilter === 'all' || product.category === categoryFilter;
-      return matchesSearch && matchesCategory && product.isActive;
+                           (product.brand && product.brand.toLowerCase().includes(searchTerm.toLowerCase()));
+      return matchesSearch;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -32,15 +46,15 @@ export default function Components() {
         case 'price-high':
           return b.price - a.price;
         case 'rating':
-          return b.rating - a.rating;
+          return (b.performanceScore || 0) - (a.performanceScore || 0);
         case 'stock':
-          return b.stock - a.stock;
+          return (b.stock || 0) - (a.stock || 0);
         default:
           return a.name.localeCompare(b.name);
       }
     });
 
-  const getStockStatus = (stock: number) => {
+  const getStockStatus = (stock: number = 0) => {
     if (stock === 0) return { color: 'destructive', text: 'Agotado' };
     if (stock < 10) return { color: 'secondary', text: `${stock} disponibles` };
     return { color: 'default', text: 'En stock' };
@@ -56,7 +70,7 @@ export default function Components() {
       return;
     }
 
-    if (product.stock === 0) {
+    if ((product.stock || 0) === 0) {
       toast({
         title: "Producto agotado",
         description: "Este producto no está disponible en stock",
@@ -65,14 +79,7 @@ export default function Components() {
       return;
     }
 
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.imageUrl,
-      category: product.category,
-      specifications: product.specifications,
-    });
+    addToCart(product, 1);
 
     toast({
       title: "Producto agregado",
