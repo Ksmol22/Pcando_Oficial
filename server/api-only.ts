@@ -1,4 +1,18 @@
 import express from "express";
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import Database from 'better-sqlite3';
+import { users, components, builds, categories } from "../shared/schema.js";
+import { eq } from "drizzle-orm";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Initialize SQLite database
+const dbPath = path.resolve(__dirname, '..', 'pcando.sqlite');
+const sqlite = new Database(dbPath);
+sqlite.pragma('foreign_keys = ON');
+const db = drizzle(sqlite, { schema: { users, components, builds, categories } });
 
 const app = express();
 app.use(express.json());
@@ -24,17 +38,42 @@ app.use((req, res, next) => {
   next();
 });
 
-// Mock API Routes
-app.get('/api/auth/user', (req, res) => {
-  res.json({
-    id: "dev-user-123",
-    email: "developer@pcando.com",
-    firstName: "Developer",
-    lastName: "User",
-    profileImageUrl: "https://via.placeholder.com/150",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+// API Routes with SQLite database
+app.get('/api/auth/user', async (req, res) => {
+  try {
+    // For demo purposes, return first user
+    const user = await db.select().from(users).limit(1);
+    if (user.length > 0) {
+      res.json(user[0]);
+    } else {
+      res.json(null);
+    }
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Find user by email
+    const user = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    
+    if (user.length > 0) {
+      // In a real app, you'd verify the password hash
+      res.json({
+        user: user[0],
+        token: `mock-token-${user[0].id}`
+      });
+    } else {
+      res.status(401).json({ error: 'Invalid credentials' });
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Login failed' });
+  }
 });
 
 app.get('/api/users', (req, res) => {
@@ -203,7 +242,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-const port = parseInt(process.env.PORT || '3001', 10);
+const port = process.env.PORT || 3003;
 app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 API Server running on http://localhost:${port}`);
   console.log(`📁 API available at http://localhost:${port}/api/`);

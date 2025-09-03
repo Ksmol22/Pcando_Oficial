@@ -61,7 +61,7 @@ export default function Configurator() {
 
   // Use our local data hooks
   const { components, isLoading: componentsLoading, addComponent } = useComponents(selectedType);
-  const { builds, addBuild, updateBuild } = useBuilds(user?.id);
+  const { builds, addBuild, updateBuild } = useBuilds(user?.id?.toString());
 
   const selectedComponentsCount = Object.keys(selectedComponents).length;
   const requiredComponents = componentTypes.filter(t => t.required).length;
@@ -325,12 +325,12 @@ export default function Configurator() {
               <div className="flex items-end">
                 <Button
                   onClick={handleSaveBuild}
-                  disabled={createBuildMutation.isPending}
+                  disabled={false}
                   className="w-full"
                   data-testid="button-save-build"
                 >
                   <Save className="mr-2 h-4 w-4" />
-                  {createBuildMutation.isPending ? 'Guardando...' : 'Guardar Build'}
+                  Guardar Build
                 </Button>
               </div>
             </div>

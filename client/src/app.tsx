@@ -83,8 +83,8 @@ function RouterComponent() {
         <Route path="/press" component={Press} />
         <Route path="/partners" component={Partners} />
         
-        {/* Catch all route */}
-        <Route component={NotFound} />
+        {/* Catch all route for unmatched paths */}
+        <Route path="*" component={NotFound} />
       </Router>
       <Footer />
       

@@ -18,7 +18,7 @@ const checks = [
       const files = [
         'package.json',
         'client/src/hooks/useAuth.ts',
-        'server/index-db.ts',
+        'server/api-only.ts',
         'scraping-system/package.json',
         'scraping-system/start.js',
         'scraping-system/.env'
